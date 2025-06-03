@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: api_rest_cursojs
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mariadb
+    environment:
+      - DATABASE=escola
+      - DATABASE_HOST=mariadb
+      - DATABASE_PORT=3306
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=IGORsql
+      - TOKEN_SECRET=gdfjhlbvsJDUVFUEWhfdafsd
+      - TOKEN_EXPIRATION=7d
+    networks:
+      - appnet
+
+  mariadb:
+    image: mariadb:10.5
+    container_name: mariadb_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: IGORsql
+      MYSQL_DATABASE: escola
+    ports:
+      - "3307:3307"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - appnet
+
+volumes:
+  mariadb_data:
+
+networks:
+  appnet:

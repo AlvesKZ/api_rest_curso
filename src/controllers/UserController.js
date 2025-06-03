@@ -7,8 +7,9 @@ class UserController {
       const { id, nome, email } = novoUser;
       return res.json({ id, nome, email });
     } catch (e) {
+      console.error("Erro no store:", e);
       return res.status(400).json({
-        errors: e.errors.map((err) => err.message),
+        errors: e?.errors?.map((err) => err.message) || [e.message || "Erro inesperado"],
       });
     }
   }
@@ -18,7 +19,10 @@ class UserController {
       const users = await User.findAll({ attributes: ["id", "nome", "email"] });
       return res.json(users);
     } catch (e) {
-      return res.json(null);
+      console.error("Erro no index:", e);
+      return res.status(400).json({
+        errors: [e.message || "Erro ao listar usuários"],
+      });
     }
   }
 
@@ -26,10 +30,17 @@ class UserController {
     try {
       const user = await User.findByPk(req.params.id);
 
+      if (!user) {
+        return res.status(404).json({ errors: ["Usuário não encontrado"] });
+      }
+
       const { id, nome, email } = user;
       return res.json({ id, nome, email });
     } catch (e) {
-      return res.json(null);
+      console.error("Erro no show:", e);
+      return res.status(400).json({
+        errors: [e.message || "Erro ao buscar usuário"],
+      });
     }
   }
 
@@ -38,7 +49,7 @@ class UserController {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({
+        return res.status(404).json({
           errors: ["Usuário não existe"],
         });
       }
@@ -47,8 +58,9 @@ class UserController {
       const { id, nome, email } = novosDados;
       return res.json({ id, nome, email });
     } catch (e) {
+      console.error("Erro no update:", e);
       return res.status(400).json({
-        errors: e.errors.map((err) => err.message),
+        errors: e?.errors?.map((err) => err.message) || [e.message || "Erro ao atualizar"],
       });
     }
   }
@@ -58,16 +70,17 @@ class UserController {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({
+        return res.status(404).json({
           errors: ["Usuário não existe"],
         });
       }
 
       await user.destroy();
-      return res.json(null);
+      return res.json({ apagado: true });
     } catch (e) {
+      console.error("Erro no delete:", e);
       return res.status(400).json({
-        errors: e.errors.map((err) => err.message),
+        errors: e?.errors?.map((err) => err.message) || [e.message || "Erro ao deletar"],
       });
     }
   }
