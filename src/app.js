@@ -8,14 +8,14 @@ const __dirname = dirname(__filename);
 
 dotenv.config();
 
-import "./src/database/index.js";
+import "./database/index.js";
 
 import express from "express";
-import homeRoutes from "./src/routes/homeRoutes.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import tokenRoutes from "./src/routes/tokenRoutes.js";
-import alunoRoutes from "./src/routes/alunoRoutes.js";
-import fotoRoutes from "./src/routes/fotoRoutes.js";
+import homeRoutes from "./routes/homeRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import tokenRoutes from "./routes/tokenRoutes.js";
+import alunoRoutes from "./routes/alunoRoutes.js";
+import fotoRoutes from "./routes/fotoRoutes.js";
 
 class App {
   constructor() {
