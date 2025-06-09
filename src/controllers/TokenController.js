@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 
 class TokenControllerController {
   async store(req, res) {
-    const { email = "", password = ""} = req.body;
+    const { email = "", password = "" } = req.body;
 
     console.log(email, password);
 
-    if(!email || !password) {
+    if (!email || !password) {
       return res.status(401).json({
         errors: ["Credenciais invalidas"],
       });
@@ -15,13 +15,13 @@ class TokenControllerController {
 
     const user = await User.findOne({ where: { email } });
 
-    if(!user) {
+    if (!user) {
       return res.status(401).json({
         errors: ["Usuário não existe"],
       });
     }
 
-    if(!(await user.passwordIsValid(password))) {
+    if (!(await user.passwordIsValid(password))) {
       return res.status(401).json({
         errors: ["Senha inválida"],
       });
@@ -32,7 +32,7 @@ class TokenControllerController {
       expiresIn: process.env.TOKEN_EXPIRATION,
     });
 
-    return res.json({token});
+    return res.json({ token, user: { nome: user.nome, id, email } });
   }
 }
 
