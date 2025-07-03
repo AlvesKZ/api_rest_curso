@@ -1,0 +1,18 @@
+services:
+  api_container:
+    container_name: api_container
+    hostname: api_container
+    image: mariadb
+    restart: always
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ~/.MariaDBData/mariadb/api_container:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: api_database
+      MYSQL_PASSWORD: root
